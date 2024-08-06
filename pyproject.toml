@@ -1,7 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools>=61.0",]
 build-backend = "setuptools.build_meta"
-
 
 [project]
 name = "reflow"
@@ -16,6 +15,10 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
+]
+dependencies = [
+ 	'pyrsistent>=0.20.0',
+	'decorator>=5.1.1',
 ]
 
 [project.urls]
