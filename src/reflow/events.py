@@ -172,6 +172,10 @@ def event(id):                     # decorator decorator, returning...
     return dp
 
 
+@event('state')
+def _(state, qry_v, val):
+    return upssoc_in(state, qry_v, val)
+
 
 register_handler('fx', 'state', state_effects_handler)
 register_handler('cofx', 'state', state_coeffects_handler)

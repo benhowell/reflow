@@ -21,6 +21,9 @@ dependencies = [
 	'decorator>=5.1.1',
 ]
 
+[project.optional-dependencies]
+test = ["coverage"]
+
 [project.urls]
 Homepage = "https://github.com/benhowell/reflow"
 Issues = "https://github.com/benhowell/reflow/issues"
