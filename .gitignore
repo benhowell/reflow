@@ -1,0 +1,7 @@
+*.pyo
+*.pyc
+*.log
+*.bak
+*.bak*
+__pycache__
+*.egg-info
