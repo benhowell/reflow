@@ -4,9 +4,16 @@ import typing
 import inspect
 from decorator import decorator
 import pyrsistent as pyr
-#from pyrsistent import *
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
 import functools
 from .exceptions import DictTypeError
+
+
+def as_async(fn, *args):
+    loop = asyncio.new_event_loop()
+    result = loop.run_in_executor(ThreadPoolExecutor(max_workers=1), fn, *args)
+    return result
 
 
 def cache(f):
@@ -142,13 +149,18 @@ def rename_fn(f,a=1):
     f.__name__ = f.__qualname__ = n
     return f
 
+FIXME: datastructure, fn, *args
 
-def mapv(fn,v,*args):
-    return {fn(v, args) for v in v}
+def mapv(fn,v,*a):
+    return {fn(v,*a) for v in v}
 
 
-def mapkv(fn,m):
-    return {fn(k,v) for (k,v) in m.items()}
+def mapkv(fn,m,*a):
+    return {fn(k,v,*a) for (k,v) in m.items()}
+
+
+def filterkv(fn,m,*a):
+    return {k:v for (k,v) in m.items() if fn(k,v,*a)}
 
 
 def is_str(x):
@@ -320,3 +332,62 @@ def args(f, *args, **kwargs):
     kwstr = ', '.join('%r: %r' % (k, kwargs[k]) for k in sorted(kwargs))
     print("calling %s with args %s, {%s}" % (f.__name__, args, kwstr))
     return inspect.getfullargspec(f).args
+
+
+
+#def filterkv(fn,m,depth=1,ks=[],vs=[]):
+# _dp = depth-1
+#     if _dp == 0:
+#         return {k:v for (k,v) in m.items() if fn(k,v)}
+#     else:
+
+#         filterkv(fn,v,_dp)
+
+
+# def ny():
+#     return True
+
+
+# def filterkv(m,pv,f,*args):
+
+#     FIXME: make vector of paths (if ny) then create map from each if match filter
+
+#     ks = pyr.pvector(pv)
+#     r = pyr.m()
+
+#     for k in v:
+#         if callable(k) and k.__name__ == ny.__name__:
+#             print("yes", v[0].__name__)
+#             print("yes", ny.__name__)
+
+
+
+
+
+#return functools.reduce(operator.getitem, pv, m)
+
+
+# def filterkv(fn,m,depth=1):
+#     if depth == 1:
+
+#     else:
+#         for k0,v0 in m.items():
+#             for k1,v1 in v0.items():
+#                 if k1 == 'subs':
+#                     #print("k1,v1: ", k1,v1)
+#                     for k2,v2 in v1.items():
+#                         print("k2,v2: ", v2.get('mute', None))
+
+
+    # match depth:
+    #     case 1:
+    #         return {k:v for (k,v) in m.items() if fn(k,v)}
+    #     case 2:
+    #         return {k1: {k2: v2
+    #                      for (k2,v2) in v1.items() if fn([k1,k2],[v1,v2])} #fn([k1,k2],[v1,v2])
+    #                 for k1, v1 in m.items()}
+    #     case 3:
+    #         return {k1: {k2: {k3: v3
+    #                           for (k3,v3) in v2.items() if fn([k1,k2,k3],[v1,v2,v3])}
+    #                      for (k2,v2) in v1.items()}
+    #                 for k1, v1 in m.items()}

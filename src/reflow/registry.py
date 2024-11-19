@@ -1,12 +1,17 @@
 #
-# Module that acts as a global registry.
-# Centralises access.
-# Ensures that everything within is only instantiated once.
+# registry.py
 #
+"""
+Module that acts as a centralized global registry.
+"""
+
+
+import pyrsistent as pyr
 
 from reflow.containers import Box
 from reflow.util import get_in, upssoc_in
-import pyrsistent as pyr
+from reflow.db import PgNotifier
+
 
 
 """
@@ -46,11 +51,6 @@ def get_flow(id):
  handler references.
 """
 handlers = Box(pyr.m(event={}, fx={}, cofx={}, error={}))
-    # 'event': {},
-    # 'sub':   {},
-    # 'error': {},
-    # 'fx':    {},
-    # 'cofx':  {}})
 
 
 def register_handler(kind, id, interceptors):
@@ -65,3 +65,12 @@ def handler(kind, id):
  Router event dispatch queue
 """
 dq = Box(pyr.dq()) # FIFO queue of incoming dispatch events.
+
+
+"""
+ Postgresql notify listener
+"""
+# only initialise pg_notifier if database configuration exists
+import reflow.config as conf
+if db_conf := conf.get('pg_notifier'):
+    pg_notifier = PgNotifier(db_conf, 'reflow')

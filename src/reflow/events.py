@@ -165,7 +165,8 @@ def event(id):                     # decorator decorator, returning...
         dfn = dec(f, id, 'event')
         register_handler(
             'event', id,
-            pyr.pvector([inject_cofx('state'), do_fx(), debug(),
+            pyr.pvector([inject_cofx('state'), do_fx(),
+                         #debug(),
              flow_interceptor(), do_flow_fx(),
              state_handler_interceptor(dfn)]))
         return dfn                 # decorator
