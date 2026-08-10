@@ -42,12 +42,12 @@ def get_flow(id):
 
 """
  Handler fn register for processing all events in reflow.
- Handler atom is keyed by handler kind (event, sub, error, etc.) and id.
+ Handler map is keyed by handler kind (event, sub, error, etc.) and id.
 
  Everything that happens in reflow affects state.
 
  Pre-configured with generic state change, and state subscription
- handler references.
+ handler references. See events.py for those specific handlers.
 """
 handlers = Box(pyr.m(event={}, fx={}, cofx={}, error={}))
 
