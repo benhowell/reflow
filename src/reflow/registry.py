@@ -5,12 +5,11 @@
 Module that acts as a centralized global registry.
 """
 
-
+import config
 import pyrsistent as pyr
 
 from reflow.containers import Box
 from reflow.util import get_in, upssoc_in
-from reflow.db import PgNotifier
 
 
 
@@ -65,12 +64,3 @@ def handler(kind, id):
  Router event dispatch queue
 """
 dq = Box(pyr.dq()) # FIFO queue of incoming dispatch events.
-
-
-"""
- Postgresql notify listener
-"""
-# only initialise pg_notifier if database configuration exists
-import reflow.config as conf
-if db_conf := conf.get('pg_notifier'):
-    pg_notifier = PgNotifier(db_conf, 'reflow')

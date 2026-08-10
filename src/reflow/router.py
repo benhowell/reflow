@@ -7,22 +7,7 @@ from reflow.registry import dq, handler
 
 
 def _exec_callbacks(ev, dq):
-    """
-    Registers the given function f to be called after each event is processed.
-    f will be called with two arguments:
-
-    event: a vector. The event just processed.
-    queue: a PersistentQueue, possibly empty, of events yet to be processed.
-
-    This facility is useful in advanced cases like:
-        * you are implementing a complex bootstrap pipeline
-        * you want to create your own handling infrastructure, with perhaps
-          multiple handlers for the one event, etc. Hook in here.
-
-    id is typically a keyword. If it supplied when an f is added, it can be
-    subsequently be used to identify it for removal.
-    """
-    print("_exec_callbacks : {x}, {y}".format(x=ev, y=dq))
+    print("    _exec_callbacks : {x}, {y}".format(x=ev, y=dq))
 
 
 
@@ -56,34 +41,9 @@ def exec_interceptors(ctx, direction):
 
 def _run_queue(*args):
     """
-    Processes what's in the queue now, allowing new events to
-    continue to enter the queue to be processed in a future run.
+    Processes what's currently in the queue. New events will continue to be
+    queued and processed in a future run.
     """
-
-    # coeffects: data about current state and data needed event/fx handler
-    # effects:   data about new state and fx to be executed
-
-    # Execute interceptor queue threading context through each interceptor
-    # {:coeffects {:event {:id, :arg},
-    #              :state <original contents of state atom>}
-    # :effects    {:state <new value for state atom>
-    #              :fx  {:dispatch {:id :arg}}}
-    # :queue      <a collection of further interceptors>
-    # :stack      <a collection of interceptors already walked>}
-
-    # Each interceptor has this form:
-    #  {:before  (fn [context] ...)     ;; returns possibly modified context
-    #   :after   (fn [context] ...)}    ;; `identity` would be a noop
-
-    # Walks the queue of interceptors from beginning to end, calling the
-    # `:before` fn on each, then reverse direction and walk backwards,
-    # calling the `:after` fn on each.
-
-    # The last interceptor in the chain presumably wraps an event
-    # handler fn. So the overall goal of the process is to \"handle
-    # the given event\".
-
-
 
     qlen = len(dq.unbox()) # only process what's in queue now...
     events = dq.unbox()[qlen:]
@@ -140,7 +100,7 @@ def fsm(t):
         nonlocal stt
         nonlocal s
         try:
-            f,s = stt[(s,t)]   # fn and next state (fn,s1 <- s0,t0)
+            f,s = stt[(s,t)]   # fn and next state (fn, s1 <- s0, t0)
             t = f()            # next trigger <- fn (t1 <- fn)
             if t is None:      # if no trigger, end of run.
                 return

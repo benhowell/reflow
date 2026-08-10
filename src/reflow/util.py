@@ -149,7 +149,7 @@ def rename_fn(f,a=1):
     f.__name__ = f.__qualname__ = n
     return f
 
-FIXME: datastructure, fn, *args
+#FIXME: datastructure, fn, *args
 
 def mapv(fn,v,*a):
     return {fn(v,*a) for v in v}
@@ -195,7 +195,8 @@ def list_eq(x,y):
         for i,v in enumerate(x):
             if x[i] != y[i]:
                 return False
-    return True
+        return True
+    return False
 
 
 def dict_copy(m,thaw=True):

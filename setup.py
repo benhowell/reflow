@@ -6,6 +6,7 @@ setup(
     install_requires=[
 	'pyrsistent>=0.20.0',
 	'decorator>=5.1.1',
+	'psycopg>=3.2.1',
     ],
 )
 

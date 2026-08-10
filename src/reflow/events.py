@@ -117,9 +117,9 @@ def inject_cofx(id, val=None):
 
 
 ### event handler interceptor factories ###
-# - state: @event(id)
-# - fx:    @fx(id)...  TODO: not implemented yet
-# - ctx:   @ctx(id)... TODO: not implemented yet
+# - state: event(id)
+# - fx:    fx(id)...  TODO: not implemented yet
+# - ctx:   ctx(id)... TODO: not implemented yet
 
 def state_handler_interceptor(fn):
     def before(ctx):
