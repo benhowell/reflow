@@ -19,7 +19,7 @@ State
 Application level access to state is via event and subscription handlers only.
 """
 state = Box(pyr.pmap({'count': 43, 'letters': 'abc',
-                      'devil': {'beast': 666, 'adjesus': 623}}))
+                      'path_to': {'another_number': 666, 'var1_adjusted': 623}}))
 
 
 def get_in_state(pv):

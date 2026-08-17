@@ -89,21 +89,21 @@ def register_flow(d):
 
 
 register_flow({
-    'id': 'jesus',
+    'id': 'var1',
     'inputs': {'count': ['count'],
-               'number': path(['devil', 'beast']),
-               'adjust': {'path': ['devil', 'adjesus']}},
-    'output': lambda count, number, adjust: (
-        count + adjust) if number != 666 else (number - adjust)})
+               'number': path(['path_to', 'another_number']),
+               'factor': {'path': ['path_to', 'var1_adjusted']}},
+    'output': lambda count, number, factor: (
+        count + factor) if number != 666 else (number - factor)})
 
 
 register_flow({
-    'id': 'jesus_saves',
-    'inputs': {'number': flow('jesus')},
+    'id': 'var2',
+    'inputs': {'number': flow('var1_adjusted')},
     'output': lambda number: number*2})
 
 
 register_flow({
-    'id': 'jesus_saves_2',
-    'inputs': {'number': {'flow': 'jesus'}},
+    'id': 'var3',
+    'inputs': {'number': {'flow': 'var1_adjusted'}},
     'output': lambda number: number*3})
